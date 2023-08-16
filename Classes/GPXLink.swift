@@ -101,10 +101,10 @@ public final class GPXLink: GPXElement, Codable {
     // MARK:- GPX
     
     override func addOpenTag(toGPX gpx: NSMutableString, indentationLevel: Int) {
-        let attribute = NSMutableString(string: "")
+        let attribute = NSMutableString()
         
         if let href = href {
-            attribute.append(" href=\"\(href)\"")
+            attribute.appendFormat(" href=\"%@\"", href)
         }
         gpx.appendOpenTag(indentation: indent(forIndentationLevel: indentationLevel), tag: tagName(), attribute: attribute)
     }

@@ -8,9 +8,6 @@
 //  XML Parser is referenced from GitHub, yahoojapan/SwiftyXMLParser.
 
 import Foundation
-#if canImport(FoundationXML)
-import FoundationXML
-#endif // canImport(FoundationXML)
 
  /**
  An event-driven parser (SAX parser), currently parses GPX v1.1 files only.
@@ -128,7 +125,7 @@ public final class GPXParser: NSObject {
     /// Starts parsing, returns parsed `GPXRoot` when done.
     ///
     public func parsedData() -> GPXRoot? {
-        _ = self.parser.parse() // parse when requested
+        self.parser.parse() // parse when requested
         guard let firstTag = stack.first else { return nil }
         guard let rawGPX = firstTag.children.first else { return nil }
         
@@ -190,7 +187,7 @@ public final class GPXParser: NSObject {
     public func fallibleParsedData(forceContinue: Bool) throws -> GPXRoot? {
         self.isErrorCheckEnabled = true
         self.shouldContinueAfterFirstError = forceContinue
-        _ = self.parser.parse() // parse when requested
+        self.parser.parse() // parse when requested
         
         guard let firstTag = stack.first else {
             throw GPXError.parser.fileIsNotXMLBased
@@ -244,7 +241,7 @@ public final class GPXParser: NSObject {
     /// Starts parsing, returns parsed `GPXRoot` when done.
     ///
     public func legacyParsingData() -> GPXLegacyRoot? {
-        _ = self.parser.parse() // parse when requested
+        self.parser.parse() // parse when requested
         guard let firstTag = stack.first, let rawGPX = firstTag.children.first else { return nil }
         
         let root = GPXLegacyRoot(raw: rawGPX)// includes attributes.
@@ -327,7 +324,7 @@ extension GPXParser {
     ///
     /// Great for basic direct compression needs.
     public func lossyParsing(type: GPXCompression.lossyTypes, affecting types: [GPXCompression.lossyOptions]) -> GPXRoot? {
-        _ = self.parser.parse()
+        self.parser.parse()
         
         guard let firstTag = stack.first else { return nil }
         guard let rawGPX = firstTag.children.first else { return nil }

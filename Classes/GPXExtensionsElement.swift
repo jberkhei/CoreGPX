@@ -70,10 +70,10 @@ open class GPXExtensionsElement: GPXElement, Codable {
     }
     
     override func addOpenTag(toGPX gpx: NSMutableString, indentationLevel: Int) {
-        let attribute = NSMutableString(string: "")
+        let attribute = NSMutableString()
         if !attributes.isEmpty {
             for (key, value) in attributes {
-                attribute.append(" \(key)=\"\(value)\"")
+                attribute.appendFormat(" %@=\"%@\"", key, value)
             }
             gpx.appendOpenTag(indentation: indent(forIndentationLevel: indentationLevel), tag: tagName(), attribute: attribute)
         }

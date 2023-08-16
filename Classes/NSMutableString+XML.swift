@@ -23,7 +23,7 @@ extension NSMutableString {
     ///     "%@<%@%@>\r\n"
     ///     //indentations <tagName attributes> \r\n
     func appendOpenTag(indentation: NSMutableString, tag: String, attribute: NSMutableString) {
-        self.append("\(indentation)<\(tag)\(attribute)>\r\n")
+        self.appendFormat("%@<%@%@>\r\n", indentation, tag, attribute)
     }
     
     /// Appends a close tag
@@ -36,11 +36,11 @@ extension NSMutableString {
     ///     "%@</%@>\r\n"
     ///     //indentations </tagName> \r\n
     func appendCloseTag(indentation: NSMutableString, tag: String) {
-        self.append("\(indentation)</\(tag)>\r\n")
+        self.appendFormat("%@</%@>\r\n", indentation, tag)
     }
     
     /// Appends attributes to a tag
     func appendAttributeTag(_ attribution: String, value: CVarArg) {
-        self.append(" \(attribution)=\"\(value)\"")
+        self.appendFormat(" %@=\"%@\"", attribution, value)
     }
 }

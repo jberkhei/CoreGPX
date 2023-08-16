@@ -77,30 +77,6 @@ public final class GPXTrack: GPXElement, Codable {
         super.init()
     }
     
-    /// Initialize with values
-    ///
-    /// - Parameters:
-    ///     - links: A value type for link properties (see `GPXLink`)
-    ///      Holds web links to external resources regarding the current track.
-    ///     - segments: Array of track segments. Must be included in every track.
-    ///     - name: Name of track.
-    ///     - comment: Additional comment of track.
-    ///     - desc: A full description of the track. Can be of any length.
-    ///     - source: Source of track.
-    ///     - number: GPS track number.
-    ///     - type: Type of current track.
-    ///     - extensions: Custom Extensions of track, if needed.
-    public init(links: [GPXLink] = [], segments: [GPXTrackSegment] = [], name: String? = nil, comment: String? = nil, desc: String? = nil, source: String? = nil, number: Int? = nil, type: String? = nil, extensions: GPXExtensions? = nil) {
-        self.links = links
-        self.segments = segments
-        self.name = name
-        self.comment = comment
-        self.desc = desc
-        self.source = source
-        self.number = number
-        self.type = type
-        self.extensions = extensions
-    }
     /// Inits native element from raw parser value
     ///
     /// - Parameters:
@@ -164,7 +140,7 @@ public final class GPXTrack: GPXElement, Codable {
     }
     
     /// Initializes a new track point in track, then returns the new track point.
-    public func newTrackPointWith(latitude: Double, longitude: Double) -> GPXTrackPoint {
+    public func newTrackPointWith(latitude: Double, longitude: Double, time: Date) -> GPXTrackPoint {
         var tracksegment: GPXTrackSegment
         
         if let lastTracksegment = segments.last {
@@ -173,7 +149,7 @@ public final class GPXTrack: GPXElement, Codable {
             tracksegment = self.newTrackSegment()
         }
         
-        return tracksegment.newTrackpointWith(latitude: latitude, longitude: longitude)
+        return tracksegment.newTrackpointWith(latitude: latitude, longitude: longitude, time: time)
     }
     
     // MARK:- Tag

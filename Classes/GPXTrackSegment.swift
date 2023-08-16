@@ -40,16 +40,6 @@ public final class GPXTrackSegment: GPXElement, Codable {
         super.init()
     }
     
-    /// Inits segment from
-    ///
-    /// - Parameters:
-    ///     - points: Track points of the segment.
-    ///     - extensions: Custom Extensions, if needed.
-    public init(points: [GPXTrackPoint] = [], extensions: GPXExtensions? = nil) {
-        self.points = points
-        self.extensions = extensions
-    }
-    
     /// Inits native element from raw parser value
     ///
     /// - Parameters:
@@ -67,8 +57,8 @@ public final class GPXTrackSegment: GPXElement, Codable {
     // MARK:- Public Methods
     
     /// Initializes a new trackpoint to segment, and returns the trackpoint.
-    public func newTrackpointWith(latitude: Double, longitude: Double) -> GPXTrackPoint {
-        let trackpoint = GPXTrackPoint(latitude: latitude, longitude: longitude)
+    public func newTrackpointWith(latitude: Double, longitude: Double, time: Date) -> GPXTrackPoint {
+        let trackpoint = GPXTrackPoint(latitude: latitude, longitude: longitude, time: time)
         
         self.add(trackpoint: trackpoint)
         

@@ -36,15 +36,6 @@ open class GPXPoint: GPXElement, Codable {
         self.longitude = longitude
     }
     
-    /// Initialize with elevation, time, latitude,  longitude
-    public init(elevation: Double? = nil, time: Date? = nil, latitude: Double? = nil, longitude: Double? = nil) {
-        super.init()
-        self.elevation = elevation
-        self.time = time
-        self.latitude = latitude
-        self.longitude = longitude
-    }
-    
     /// Inits native element from raw parser value
     ///
     /// - Parameters:
@@ -55,7 +46,7 @@ open class GPXPoint: GPXElement, Codable {
         for child in raw.children {
             switch child.name {
             case "ele": self.elevation = Convert.toDouble(from: child.text)
-            case "time": self.time = GPXDateParser().parse(date: child.text)
+            case "time": self.time = GPXDateParser.parse(date: child.text)
             default: continue
             }
         }
@@ -70,7 +61,7 @@ open class GPXPoint: GPXElement, Codable {
     // MARK: GPX
     
     override func addOpenTag(toGPX gpx: NSMutableString, indentationLevel: Int) {
-        let attribute = NSMutableString(string: "")
+        let attribute = NSMutableString()
         if let latitude = latitude {
             attribute.append(" lat=\"\(latitude)\"")
         }

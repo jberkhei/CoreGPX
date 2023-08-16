@@ -95,21 +95,6 @@ public final class GPXRoot: GPXElement, Codable {
         self.creator = creator
     }
     
-    /// Initialize with values
-    ///
-    /// - Parameters:
-    ///     - version: GPX version that will be generated
-    ///     - creator: Name of the creator of the GPX content
-    ///     - metadata: Metadata to be included in your GPX content
-    ///     - waypoints:  Array of waypoints
-    ///     - routes: Array of routes
-    ///     - tracks: Array of tracks
-    ///     - extensions: Items for extensions to GPX schema (if any).
-    ///     Leave it as is, if used without modification to GPX schema
-    public init(version: String = "1.1", creator: String? = nil, metadata: GPXMetadata? = nil, waypoints: [GPXWaypoint] = [], routes: [GPXRoute] = [], tracks: [GPXTrack] = [], extensions: GPXExtensions? = nil) {
-        
-    }
-    
     /// Inits native element from raw parser value
     ///
     /// - Parameters:
@@ -167,8 +152,8 @@ public final class GPXRoot: GPXElement, Codable {
     /// - Returns:
     /// A `GPXWaypoint` object.
     ///
-    public func newWaypointWith(latitude: Double, longitude: Double) -> GPXWaypoint {
-        let waypoint = GPXWaypoint.init(latitude: latitude, longitude: longitude)
+    public func newWaypointWith(latitude: Double, longitude: Double, time: Date) -> GPXWaypoint {
+        let waypoint = GPXWaypoint.init(latitude: latitude, longitude: longitude, time: time)
         
         self.add(waypoint: waypoint)
         
@@ -324,25 +309,25 @@ public final class GPXRoot: GPXElement, Codable {
     
     // MARK:- GPX
     override func addOpenTag(toGPX gpx: NSMutableString, indentationLevel: Int) {
-        let attribute = NSMutableString(string: "")
+        let attribute = NSMutableString()
         
-        attribute.append(" xmlns:xsi=\"\(self.xsi)\"")
-        attribute.append(" xmlns=\"\(self.schema)\"")
+        attribute.appendFormat(" xmlns:xsi=\"%@\"", self.xsi)
+        attribute.appendFormat(" xmlns=\"%@\"", self.schema)
         
         // for extensions attributes to be appended.
         if let extensionAttributes = self.extensionAttributes {
             for attributeKey in extensionAttributes.keys {
-                attribute.append(" \(attributeKey)=\"\(extensionAttributes[attributeKey] ?? "Data is invalid")\"")
+                attribute.appendFormat(" %@=\"%@\"", attributeKey, extensionAttributes[attributeKey] ?? "Data is invalid")
             }
         }
         
-        attribute.append(" xsi:schemaLocation=\"\(self.schemaLocation)\"")
+        attribute.appendFormat(" xsi:schemaLocation=\"%@\"", self.schemaLocation)
         
-        attribute.append(" version=\"\(version)\"")
+        attribute.appendFormat(" version=\"%@\"", version)
         
         
         if let creator = self.creator {
-            attribute.append(" creator=\"\(creator)\"")
+            attribute.appendFormat(" creator=\"%@\"", creator)
         }
         
         gpx.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n")

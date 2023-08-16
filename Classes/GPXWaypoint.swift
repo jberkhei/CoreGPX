@@ -196,7 +196,6 @@ public class GPXWaypoint: GPXElement, GPXWaypointProtocol, Codable {
     ///     At least latitude and longitude should be configured as required by the GPX v1.1 schema.
     ///
     public required init() {
-        self.time = Date()
         super.init()
     }
     
@@ -211,32 +210,9 @@ public class GPXWaypoint: GPXElement, GPXWaypointProtocol, Codable {
     ///     - latitude: latitude value of the waypoint, in `Double` or `CLLocationDegrees`, **WGS 84** datum only. Should be within the ranges of **-90.0 to 90.0**
     ///     - longitude: longitude value of the waypoint, in `Double` or `CLLocationDegrees`, **WGS 84** datum only. Should be within the ranges of **-180.0 to 180.0**
     ///
-    public init(latitude: Double, longitude: Double) {
-        self.time = Date()
+    public init(latitude: Double, longitude: Double, time: Date) {
         super.init()
-        self.latitude = latitude
-        self.longitude = longitude
-    }
-    
-    /// Initialize with parameters.
-    ///
-    /// - Parameters:
-    ///     - latitude: latitude value of the waypoint, in `Double` or `CLLocationDegrees`, **WGS 84** datum only. Should be within the ranges of **-90.0 to 90.0**
-    ///     - longitude: longitude value of the waypoint, in `Double` or `CLLocationDegrees`, **WGS 84** datum only. Should be within the ranges of **-180.0 to 180.0**
-    ///
-    public init(links: [GPXLink] = [], elevation: Double? = nil, time: Date? = nil, magneticVariation: Double? = nil, geoidHeight: Double? = nil, source: String? = nil, type: String? = nil, satellites: Int? = nil, horizontalDilution: Double? = nil, verticalDilution: Double? = nil, positionDilution: Double? = nil, extensions: GPXExtensions? = nil, latitude: Double? = nil, longitude: Double? = nil) {
-        self.links = links
-        self.elevation = elevation
         self.time = time
-        self.magneticVariation = magneticVariation
-        self.geoidHeight = geoidHeight
-        self.source = source
-        self.type = type
-        self.satellites = satellites
-        self.horizontalDilution = horizontalDilution
-        self.verticalDilution = verticalDilution
-        self.positionDilution = positionDilution
-        self.extensions = extensions
         self.latitude = latitude
         self.longitude = longitude
     }
@@ -247,7 +223,7 @@ public class GPXWaypoint: GPXElement, GPXWaypointProtocol, Codable {
     /// init(latitude:longitude:)
     public convenience init(verifiedLatitude latitude: Double, longitude: Double) throws {
         guard let error = GPXError.checkError(latitude: latitude, longitude: longitude) else {
-            self.init(latitude: latitude, longitude: longitude)
+            self.init(latitude: latitude, longitude: longitude, time: Date())
             return }
         
         throw error
@@ -264,7 +240,7 @@ public class GPXWaypoint: GPXElement, GPXWaypointProtocol, Codable {
         
         for child in raw.children {
             switch child.name {
-            case "time":        self.time = GPXDateParser().parse(date: child.text)
+            case "time":        self.time = GPXDateParser.parse(date: child.text)
             case "ele":         self.elevation = Convert.toDouble(from: child.text)
             case "magvar":      self.magneticVariation = Convert.toDouble(from: child.text)
             case "geoidheight": self.geoidHeight = Convert.toDouble(from: child.text)
@@ -313,7 +289,7 @@ public class GPXWaypoint: GPXElement, GPXWaypointProtocol, Codable {
     // MARK:- GPX
     
     override func addOpenTag(toGPX gpx: NSMutableString, indentationLevel: Int) {
-        let attribute = NSMutableString(string: "")
+        let attribute = NSMutableString()
         
         if let latitude = latitude {
             attribute.append(" lat=\"\(latitude)\"")

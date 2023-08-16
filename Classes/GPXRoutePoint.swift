@@ -21,8 +21,8 @@ public final class GPXRoutePoint: GPXWaypoint {
     
     // MARK:- Instance
     
-    public override init(latitude: Double, longitude: Double) {
-        super.init(latitude: latitude, longitude: longitude)
+    public override init(latitude: Double, longitude: Double, time: Date) {
+        super.init(latitude: latitude, longitude: longitude, time:time)
     }
     
     override init(raw: GPXRawElement) {

@@ -79,29 +79,6 @@ public final class GPXRoute: GPXElement, Codable, GPXRouteType {
         super.init()
     }
     
-    /// Initializer with values for convenience
-    ///
-    /// - Parameters:
-    ///     - name: Name of the route.
-    ///     - comment: Additional comment of the route.
-    ///     - desc: Description of the route.
-    ///     - source:  Source of the route.
-    ///     - links: A value type for link properties (see `GPXLink`)
-    ///     Intended for additional information about current route through web links.
-    ///     - type: Type of route.
-    ///     - extensions: Items for extensions to GPX schema (if any).
-    public init(name: String? = nil, comment: String? = nil, desc: String? = nil, source: String? = nil, links: [GPXLink] = [], type: String? = nil, extensions: GPXExtensions? = nil, points: [GPXRoutePoint] = [], number: Int? = nil) {
-        self.name = name
-        self.comment = comment
-        self.desc = desc
-        self.source = source
-        self.links = links
-        self.type = type
-        self.extensions = extensions
-        self.points = points
-        self.number = number
-    }
-    
     /// Inits native element from raw parser value
     ///
     /// - Parameters:
@@ -137,8 +114,8 @@ public final class GPXRoute: GPXElement, Codable, GPXRouteType {
     /// Creates a `GPXRoutePoint` which is added to the route and also returned.
     ///
     /// Not recommended for use. Init `GPXRoutePoint` manually, then adding it to route, instead.
-    func newRoutePointWith(latitude: Double, longitude: Double) -> GPXRoutePoint {
-        let routepoint = GPXRoutePoint(latitude: latitude, longitude: longitude)
+    func newRoutePointWith(latitude: Double, longitude: Double, time: Date) -> GPXRoutePoint {
+        let routepoint = GPXRoutePoint(latitude: latitude, longitude: longitude, time: time)
 
         self.add(routepoint: routepoint)
         
